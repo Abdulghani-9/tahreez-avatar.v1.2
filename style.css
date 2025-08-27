@@ -1,0 +1,156 @@
+/* Basic reset */
+/*
+ * Ensure the page fills the entire display without unwanted margins.  Setting
+ * both the html and body to 100% height allows the Flexbox container to
+ * stretch and fill the Proto device’s portrait screen.  The dark background
+ * helps the hologram blend with the device’s tinted glass.
+ */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #111;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    overflow: hidden;
+}
+
+/*
+ * The main container occupies the full device screen.  Flexbox is used to
+ * allocate most of the vertical space to the avatar while keeping the chat
+ * controls anchored at the bottom.  The absolute positioning removes any
+ * default margins that could cause the content to appear smaller than
+ * expected on the Proto device.
+ */
+#appContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+#cameraView {
+    display: none; /* hide the camera preview on the hologram */
+    width: 160px;
+    height: 90px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/*
+ * The avatar container flexes to fill available space, ensuring the hologram
+ * scales gracefully across different Proto models (Luma, M or Epic).  The
+ * avatar image itself is constrained so that it never overflows its
+ * container while maintaining aspect ratio.  Increasing the max-width and
+ * max-height yields a larger hologram without clipping.
+ */
+#avatarContainer {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#avatar {
+    max-width: 80%;
+    max-height: 80%;
+    height: auto;
+    width: auto;
+    display: block;
+}
+
+/* Mouth overlay for simple lip animation */
+#mouth {
+    position: absolute;
+    bottom: 18%;
+    left: 50%;
+    width: 20%;
+    height: 8%;
+    transform: translateX(-50%);
+    background: rgba(240, 180, 150, 0.6);
+    border-radius: 0 0 50% 50%;
+    display: none;
+}
+
+.talking #mouth {
+    display: block;
+    animation: talking 0.3s steps(2, start) infinite;
+}
+
+@keyframes talking {
+    0%   { transform: translateX(-50%) scaleY(0.4); }
+    50%  { transform: translateX(-50%) scaleY(1.2); }
+    100% { transform: translateX(-50%) scaleY(0.4); }
+}
+
+#chatContainer {
+    width: 90%;
+    max-width: 600px;
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#chatLog {
+    height: 200px;
+    overflow-y: auto;
+    padding: 5px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+#chatLog .bot {
+    color: #6fc3df;
+    margin-bottom: 6px;
+}
+
+#chatLog .user {
+    color: #dfe36f;
+    margin-bottom: 6px;
+    text-align: right;
+}
+
+#controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+}
+
+#controls input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    margin-right: 5px;
+}
+
+#controls button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    background: #6fc3df;
+    color: #000;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#controls button:hover {
+    background: #4faecf;
+}
